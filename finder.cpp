@@ -70,13 +70,13 @@ void print(Node n, string s="") {
 }
 
 // find if each word has a rot13 counterpart
-void find_rot13(Node *ptr, Node *ptr2, string s="") {
+void find_rot13(Node *ptr, Node *ptr2, string s="", int level=0) {
     for (auto it : ptr->m) {
 	char c = it.first;
 	char r = rot13(c);
 	// find counterpart for current letter
 	auto it2 = ptr2->m.find(r);
-	if (it2 == ptr2->m.end()) return;
+	if (it2 == ptr2->m.end()) continue;
 	// from this point there are counterparts for partial words
 
 	// if terminating character full word is indeed found
@@ -87,7 +87,7 @@ void find_rot13(Node *ptr, Node *ptr2, string s="") {
 	string ns = s;
 	ns += c;
 	// find for next partial words
-	find_rot13(&(it.second), &(it2->second), ns);
+	find_rot13(&(it.second), &(it2->second), ns,level+1);
     }
 }
 
@@ -98,6 +98,7 @@ int main(int argc, char **argv) {
     }
     Node n = generateFromFile(argv[1]);
     //print(n);
+
     find_rot13(&n, &n);
 
     return 0;
